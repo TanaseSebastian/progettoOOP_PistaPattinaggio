@@ -3,10 +3,11 @@ package org.example.progettooop_pistapattinaggio.util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Inventory {
+public class Inventory implements Serializable {
     private final Map<Integer, Integer> shoeSizes; // <size, available_quantity>
 
     public Inventory() {
@@ -50,5 +51,9 @@ public class Inventory {
 
     public boolean isAvailable(int size, int quantity) {
         return shoeSizes.getOrDefault(size, 0) >= quantity;
+    }
+
+    public void addItem(InventoryItem newItem) {
+        addShoes(newItem.getShoeSize(), newItem.getQuantity());
     }
 }

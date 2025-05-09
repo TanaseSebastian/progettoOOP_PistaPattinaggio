@@ -17,6 +17,13 @@ public class Customer implements Serializable {
         this.isMember = isMember;
     }
 
+    public Customer(String name) {
+        this.name = name;
+        this.age = 0;
+        this.phone = "";
+        this.isMember = false;
+    }
+
     // Getters e Setters
     public String getName() {
         return name;

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.progettooop_pistapattinaggio.DashboardController">
+    <!-- Top Menu -->
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Nuova Prenotazione" onAction="#handleNewBooking"/>
+                <MenuItem text="Esci" onAction="#handleExit"/>
+            </Menu>
+            <Menu text="Vendite">
+                <MenuItem text="Genera Report" onAction="#handleGenerateReport"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <!-- Center Section -->
+    <center>
+        <TabPane>
+            <!-- Tab 1: Prenotazioni -->
+            <Tab text="Prenotazioni">
+                <VBox spacing="10">
+                    <HBox spacing="10">
+                        <Button text="Aggiungi Prenotazione" onAction="#handleNewBooking"/>
+                        <Button text="Visualizza Prenotazioni" onAction="#handleViewBookings"/>
+                    </HBox>
+
+                    <TableView fx:id="bookingsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="customerNameColumn" text="Cliente" />
+                            <TableColumn fx:id="ticketTypeColumn" text="Biglietto" />
+                            <TableColumn fx:id="bookingShoeSizeColumn" text="Taglia" />
+                            <TableColumn fx:id="bookingQuantityColumn" text="Quantità" />
+                        </columns>
+                    </TableView>
+
+                    <Separator/>
+
+                    <Separator/>
+                    <GridPane hgap="10" vgap="10">
+                        <Label text="Cliente:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="customerNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Biglietto:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="ticketTypeCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Taglia:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="bookingShoeSizeField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="Quantità:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="bookingQuantityField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="Pagamento:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="paymentMethodCombo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                        <Button text="Crea Prenotazione"
+                                onAction="#handleCreateBooking"
+                                GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                    </GridPane>
+                </VBox>
+            </Tab>
+
+            <Tab text="Inventario">
+                <VBox spacing="10">
+                    <TableView fx:id="inventoryTable">
+                        <columns>
+                            <TableColumn fx:id="shoeSizeColumn" text="Taglia" />
+                            <TableColumn fx:id="quantityColumn" text="Quantità Disponibile" />
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="10">
+                        <Label text="Taglia:"/>
+                        <TextField fx:id="newShoeSizeField" promptText="Es. 38" />
+                        <Label text="Quantità:"/>
+                        <TextField fx:id="newQuantityField" promptText="Es. 5" />
+                        <Button text="Aggiungi" onAction="#handleAddInventoryItem"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 3: Report Vendite -->
+            <Tab text="Report">
+                <VBox spacing="10">
+                    <Button text="Genera Report Giornaliero" onAction="#handleGenerateReport"/>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+
+    <!-- Bottom Section -->
+    <bottom>
+        <Label fx:id="totalSales" text="€ 0.00">
+            <font>
+                <Font size="20"/>
+            </font>
+        </Label>
+    </bottom>
+</BorderPane>

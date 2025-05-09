@@ -37,7 +37,8 @@ public class DataManager {
 
     // Carica l'inventario
     public static Inventory loadInventory() {
-        return (Inventory) load("inventory.ser");
+        Inventory inventory = (Inventory) load("inventory.ser");
+        return (inventory != null) ? inventory : new Inventory();  // ← restituisce oggetto vuoto se file assente o corrotto
     }
 
     // Salva le prenotazioni

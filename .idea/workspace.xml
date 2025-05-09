@@ -5,44 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5acdbcbf-7b35-46c2-9494-19228777dfda" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/HelloApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/HelloController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/iterator/SlotIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Booking.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/CustomTicket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Day.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaDiPattinaggio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaIndoor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Slot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Ticket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/CashRegister.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/InventoryItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/LoggerManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Repository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/view/dashboard-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/inventory-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/hello-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/progettooop_pistapattinaggio/TestDataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookings.ser" beforeDir="false" afterPath="$PROJECT_DIR$/bookings.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory.ser" beforeDir="false" afterPath="$PROJECT_DIR$/inventory.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/view/dashboard-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/dashboard-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,11 +56,29 @@
     "JUnit.TestDataManager.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Rebasing main",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.TestDataManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.HelloApplication">
+    <configuration name="HelloApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.HelloApplication" />
+      <module name="progettoOOP_PistaPattinaggio" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.progettooop_pistapattinaggio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="BookingServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="progettoOOP_PistaPattinaggio" />
       <extension name="coverage">
@@ -154,6 +143,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.HelloApplication" />
         <item itemvalue="JUnit.TestDataManager" />
         <item itemvalue="JUnit.BookingServiceTest" />
         <item itemvalue="JUnit.BookingServiceTest.testCashRegisterRecordPayment" />
