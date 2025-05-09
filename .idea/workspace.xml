@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5acdbcbf-7b35-46c2-9494-19228777dfda" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/HelloApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/HelloController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/iterator/SlotIterator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Booking.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/CustomTicket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Day.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaDiPattinaggio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaIndoor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Slot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Ticket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/CashRegister.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/InventoryItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/LoggerManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Repository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/view/dashboard-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/inventory-config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/hello-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/progettooop_pistapattinaggio/TestDataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2worqYrrUHar4YlA8qHQBHxZTwF" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "JUnit.BookingServiceTest.executor": "Run",
+    "JUnit.BookingServiceTest.testCashRegisterRecordPayment.executor": "Run",
+    "JUnit.BookingServiceTest.testSellTicketFailureDueToNoShoes.executor": "Run",
+    "JUnit.TestDataManager.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "Rebasing main",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="JUnit.TestDataManager">
+    <configuration name="BookingServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="progettoOOP_PistaPattinaggio" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.progettooop_pistapattinaggio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.progettooop_pistapattinaggio" />
+      <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.BookingServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BookingServiceTest.testCashRegisterRecordPayment" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="progettoOOP_PistaPattinaggio" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.progettooop_pistapattinaggio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.progettooop_pistapattinaggio" />
+      <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.BookingServiceTest" />
+      <option name="METHOD_NAME" value="testCashRegisterRecordPayment" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BookingServiceTest.testSellTicketFailureDueToNoShoes" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="progettoOOP_PistaPattinaggio" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.progettooop_pistapattinaggio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.progettooop_pistapattinaggio" />
+      <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.BookingServiceTest" />
+      <option name="METHOD_NAME" value="testSellTicketFailureDueToNoShoes" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestDataManager" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="progettoOOP_PistaPattinaggio" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.progettooop_pistapattinaggio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.progettooop_pistapattinaggio" />
+      <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.TestDataManager" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TestDataManager" />
+        <item itemvalue="JUnit.BookingServiceTest" />
+        <item itemvalue="JUnit.BookingServiceTest.testCashRegisterRecordPayment" />
+        <item itemvalue="JUnit.BookingServiceTest.testSellTicketFailureDueToNoShoes" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5acdbcbf-7b35-46c2-9494-19228777dfda" name="Changes" comment="" />
+      <created>1746718963440</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746718963440</updated>
+    </task>
+    <servers />
+  </component>
+</project>
