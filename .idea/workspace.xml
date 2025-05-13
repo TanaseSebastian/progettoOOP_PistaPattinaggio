@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5acdbcbf-7b35-46c2-9494-19228777dfda" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/css/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookings.ser" beforeDir="false" afterPath="$PROJECT_DIR$/bookings.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory.ser" beforeDir="false" afterPath="$PROJECT_DIR$/inventory.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/view/dashboard-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/dashboard-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Repository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/dashboard-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/dashboard-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,21 +46,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.HelloApplication.executor": "Run",
-    "JUnit.BookingServiceTest.executor": "Run",
-    "JUnit.BookingServiceTest.testCashRegisterRecordPayment.executor": "Run",
-    "JUnit.BookingServiceTest.testSellTicketFailureDueToNoShoes.executor": "Run",
-    "JUnit.TestDataManager.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingServiceTest.testCashRegisterRecordPayment.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingServiceTest.testSellTicketFailureDueToNoShoes.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestDataManager.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/sebastiantanase/progettoOOP_PistaPattinaggio/src/main/resources/org/example/progettooop_pistapattinaggio/css&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/css" />
+      <recent name="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/css" />
       <recent name="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio" />
     </key>
   </component>

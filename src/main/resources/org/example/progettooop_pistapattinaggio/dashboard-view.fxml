@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.progettooop_pistapattinaggio.DashboardController">
-    <!-- Top Menu -->
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.progettooop_pistapattinaggio.DashboardController"
+            stylesheets="@css/styles.css">
+
+    <!-- Top Navbar -->
     <top>
-        <MenuBar>
-            <Menu text="File">
-                <MenuItem text="Nuova Prenotazione" onAction="#handleNewBooking"/>
-                <MenuItem text="Esci" onAction="#handleExit"/>
-            </Menu>
-            <Menu text="Vendite">
-                <MenuItem text="Genera Report" onAction="#handleGenerateReport"/>
-            </Menu>
-        </MenuBar>
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="navbar shadow-sm">
+            <Label text="Pista Pattinaggio" styleClass="navbar-brand"/>
+            <MenuBar>
+                <Menu text="File">
+                    <MenuItem text="Nuova Prenotazione" onAction="#handleNewBooking"/>
+                    <MenuItem text="Esci" onAction="#handleExit"/>
+                </Menu>
+                <Menu text="Vendite">
+                    <MenuItem text="Genera Report" onAction="#handleGenerateReport"/>
+                </Menu>
+            </MenuBar>
+        </HBox>
     </top>
 
-    <!-- Center Section -->
+    <!-- Main Content -->
     <center>
         <TabPane>
-            <!-- Tab 1: Prenotazioni -->
+            <!-- Prenotazioni -->
             <Tab text="Prenotazioni">
-                <VBox spacing="10">
-                    <HBox spacing="10">
-                        <Button text="Aggiungi Prenotazione" onAction="#handleNewBooking"/>
-                        <Button text="Visualizza Prenotazioni" onAction="#handleViewBookings"/>
-                    </HBox>
+                <VBox spacing="20" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
 
-                    <TableView fx:id="bookingsTable" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="bookingsTable" VBox.vgrow="ALWAYS" >
                         <columns>
-                            <TableColumn fx:id="customerNameColumn" text="Cliente" />
-                            <TableColumn fx:id="ticketTypeColumn" text="Biglietto" />
-                            <TableColumn fx:id="bookingShoeSizeColumn" text="Taglia" />
-                            <TableColumn fx:id="bookingQuantityColumn" text="Quantità" />
+                            <TableColumn fx:id="customerNameColumn" text="Cliente"/>
+                            <TableColumn fx:id="ticketTypeColumn" text="Biglietto"/>
+                            <TableColumn fx:id="bookingShoeSizeColumn" text="Taglia"/>
+                            <TableColumn fx:id="bookingQuantityColumn" text="Quantità"/>
                         </columns>
                     </TableView>
 
                     <Separator/>
 
-                    <Separator/>
-                    <GridPane hgap="10" vgap="10">
+                    <GridPane hgap="15" vgap="15" alignment="CENTER" >
                         <Label text="Cliente:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                         <TextField fx:id="customerNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
@@ -59,47 +61,54 @@
                         <Label text="Pagamento:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
                         <ComboBox fx:id="paymentMethodCombo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                        <Button text="Crea Prenotazione"
-                                onAction="#handleCreateBooking"
-                                GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                        <Button text="Crea Prenotazione" onAction="#handleCreateBooking"
+                                GridPane.rowIndex="5" GridPane.columnIndex="1"
+                                styleClass="btn-success"/>
                     </GridPane>
                 </VBox>
             </Tab>
 
+            <!-- Inventario -->
             <Tab text="Inventario">
-                <VBox spacing="10">
+                <VBox spacing="20" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
                     <TableView fx:id="inventoryTable">
                         <columns>
-                            <TableColumn fx:id="shoeSizeColumn" text="Taglia" />
-                            <TableColumn fx:id="quantityColumn" text="Quantità Disponibile" />
+                            <TableColumn fx:id="shoeSizeColumn" text="Taglia"/>
+                            <TableColumn fx:id="quantityColumn" text="Quantità Disponibile"/>
                         </columns>
                     </TableView>
 
-                    <HBox spacing="10">
-                        <Label text="Taglia:"/>
-                        <TextField fx:id="newShoeSizeField" promptText="Es. 38" />
-                        <Label text="Quantità:"/>
-                        <TextField fx:id="newQuantityField" promptText="Es. 5" />
-                        <Button text="Aggiungi" onAction="#handleAddInventoryItem"/>
+                    <HBox spacing="10" alignment="CENTER">
+                        <TextField fx:id="newShoeSizeField" promptText="Taglia"/>
+                        <TextField fx:id="newQuantityField" promptText="Quantità"/>
+                        <Button text="Aggiungi" onAction="#handleAddInventoryItem" styleClass="btn-warning"/>
                     </HBox>
                 </VBox>
             </Tab>
 
-            <!-- Tab 3: Report Vendite -->
+            <!-- Report -->
             <Tab text="Report">
-                <VBox spacing="10">
-                    <Button text="Genera Report Giornaliero" onAction="#handleGenerateReport"/>
+                <VBox spacing="20" alignment="CENTER" styleClass="card">
+                    <padding>
+                        <Insets top="30" right="30" bottom="30" left="30"/>
+                    </padding>
+                    <Button text="Genera Report Giornaliero" onAction="#handleGenerateReport" styleClass="btn-info"/>
                 </VBox>
             </Tab>
         </TabPane>
     </center>
 
-    <!-- Bottom Section -->
+    <!-- Footer -->
     <bottom>
-        <Label fx:id="totalSales" text="€ 0.00">
-            <font>
-                <Font size="20"/>
-            </font>
-        </Label>
+        <HBox alignment="CENTER_RIGHT" styleClass="bg-white border-top shadow-sm">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="totalSales" text="Totale Vendite: € 0.00" styleClass="h4 text-primary"/>
+        </HBox>
     </bottom>
 </BorderPane>

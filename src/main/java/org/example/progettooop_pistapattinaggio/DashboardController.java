@@ -65,6 +65,14 @@ public class DashboardController {
         paymentMethodCombo.getItems().addAll("Contanti", "Carta");
         // Popola la tabella con le prenotazioni esistenti
         handleViewBookings();
+        updateTotalSales(); // ← aggiorna il totale all'avvio
+    }
+
+    private void updateTotalSales() {
+        double total = bookingService.getAllBookings().stream()
+                .mapToDouble(b -> b.getTicket().getPrice())
+                .sum();
+        totalSales.setText(String.format("Totale Vendite: € %.2f", total));
     }
 
     @FXML
@@ -110,6 +118,8 @@ public class DashboardController {
             alert.setTitle("Prenotazione Aggiunta");
             alert.setContentText("✅ Prenotazione per " + customerName + " creata con successo!");
             alert.showAndWait();
+
+            updateTotalSales(); // aggiorna le vendite
 
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

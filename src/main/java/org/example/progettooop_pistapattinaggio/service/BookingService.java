@@ -1,10 +1,7 @@
 package org.example.progettooop_pistapattinaggio.service;
 
 import org.example.progettooop_pistapattinaggio.model.*;
-import org.example.progettooop_pistapattinaggio.util.CashRegister;
-import org.example.progettooop_pistapattinaggio.util.Inventory;
-import org.example.progettooop_pistapattinaggio.util.LoggerManager;
-import org.example.progettooop_pistapattinaggio.util.Repository;
+import org.example.progettooop_pistapattinaggio.util.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +11,10 @@ public class BookingService {
 
     private static final Logger logger = LoggerManager.getLogger();
     private final Repository<Booking> bookingRepository = new Repository<>();
-
+    public BookingService() {
+        List<Booking> loadedBookings = DataManager.loadBookings();
+        bookingRepository.setAll(loadedBookings != null ? loadedBookings : List.of());
+    }
     public boolean sellTicket(Slot slot, Customer customer, Ticket ticket, int shoeSize, int shoeQuantity, Inventory inventory, String paymentMethod) {
         try {
             // Verifica la disponibilità dello slot

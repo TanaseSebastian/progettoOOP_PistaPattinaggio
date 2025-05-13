@@ -29,4 +29,9 @@ public class Repository<T> {
     public boolean isEmpty() {
         return items.isEmpty();
     }
+
+    public void setAll(List<T> items) {
+        this.items.clear();
+        this.items.addAll(items);
+    }
 }
