@@ -210,7 +210,7 @@ public class DashboardController {
                     .orElse("-");
             alert.setContentText("✅ Prenotazione per " + customerName + " creata con successo!\nTaglie: " + taglie);
             alert.showAndWait();
-            printTicketWithQR(booking);
+            PrinterManager.printTicket(booking);
             updateTotalSales();
 
         } catch (Exception e) {
@@ -221,179 +221,6 @@ public class DashboardController {
             alert.showAndWait();
         }
     }
-
-    private void printTicketWithQR(Booking booking) {
-        try {
-            String ESC = "\u001B";
-            String NEW_LINE = "\n";
-
-            Customer customer = booking.getCustomer();
-            Ticket ticket = booking.getTicket();
-            List<ShoeRental> shoes = booking.getRentedShoes();
-
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-            // LOGO ASCII (puoi sostituirlo con grafico se vuoi)
-            output.write((ESC + "@").getBytes()); // Init
-            output.write((ESC + "!").getBytes()); // Style
-            output.write("\u001B!\u0038".getBytes()); // Bold + double
-            output.write("PISTA PATTINAGGIO\n".getBytes());
-            output.write("\u001B!\u0000".getBytes()); // Normal
-            output.write("--------------------------------\n".getBytes());
-
-            output.write(("Cliente: " + customer.getName() + NEW_LINE).getBytes());
-            output.write(("Biglietto: " + ticket.getName() + NEW_LINE).getBytes());
-            output.write(("Prezzo: " + String.format("%.2f", ticket.getPrice()) + " euro" + NEW_LINE).getBytes());
-            output.write(("Metodo: " + booking.getPaymentMethod() + NEW_LINE).getBytes());
-
-            output.write("Taglie pattini:\n".getBytes());
-            for (ShoeRental sr : shoes) {
-                output.write((" - " + sr.getQuantity() + "x" + sr.getSize() + NEW_LINE).getBytes());
-            }
-            output.write("--------------------------------\n".getBytes());
-
-            // GENERA QR CON ID
-            BufferedImage qr = generateQR(booking.getId());
-            byte[] qrBytes = convertImageToESCBitmap(qr);
-            output.write(qrBytes);
-
-            output.write((NEW_LINE + "Prenotazione ID:\n" + booking.getId() + NEW_LINE).getBytes());
-            output.write(NEW_LINE.getBytes());
-            output.write("Grazie e buona pattinata!\n\n\n".getBytes());
-            output.write((ESC + "d" + "\u0004").getBytes()); // Feed
-            output.write((ESC + "m").getBytes()); // Cut
-
-            // INVIO STAMPA
-            byte[] data = output.toByteArray();
-            Doc doc = new SimpleDoc(new ByteArrayInputStream(data), DocFlavor.INPUT_STREAM.AUTOSENSE, null);
-
-            PrintService escposPrinter = null;
-            for (PrintService ps : PrintServiceLookup.lookupPrintServices(null, null)) {
-                if (ps.getName().toLowerCase().contains("yichip")) {
-                    escposPrinter = ps;
-                    break;
-                }
-            }
-
-            if (escposPrinter == null) {
-                System.err.println("Stampante ESC/POS non trovata");
-                return;
-            }
-
-            DocPrintJob job = escposPrinter.createPrintJob();
-            job.print(doc, new HashPrintRequestAttributeSet());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private BufferedImage generateQR(String text) throws Exception {
-        BitMatrix matrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, 200, 200);
-        return MatrixToImageWriter.toBufferedImage(matrix);
-    }
-
-    private byte[] convertImageToESCBitmap(BufferedImage image) throws IOException {
-        // Convert image to monochrome ESC/POS format
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        bos.write(new byte[]{0x1D, 0x76, 0x30, 0x00}); // Raster bit image command
-        bos.write((byte) (width / 8)); // width in bytes (low byte)
-        bos.write(0); // width high byte
-        bos.write((byte) (height & 0xFF)); // height low byte
-        bos.write((byte) ((height >> 8) & 0xFF)); // height high byte
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x += 8) {
-                int byteVal = 0;
-                for (int b = 0; b < 8; b++) {
-                    int px = x + b;
-                    if (px < width) {
-                        int color = image.getRGB(px, y);
-                        int r = (color >> 16) & 0xFF;
-                        int g = (color >> 8) & 0xFF;
-                        int bl = color & 0xFF;
-                        int avg = (r + g + bl) / 3;
-                        if (avg < 128) {
-                            byteVal |= (1 << (7 - b));
-                        }
-                    }
-                }
-                bos.write(byteVal);
-            }
-        }
-
-        return bos.toByteArray();
-    }
-
-    private void printReportToESC_POS(LocalDate date, List<Booking> bookings) {
-        try {
-            String ESC = "\u001B";
-            String NEW_LINE = "\n";
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-            output.write((ESC + "@").getBytes()); // Init
-
-            output.write(ESC.getBytes());
-            output.write("!".getBytes());
-            output.write(new byte[]{0x38}); // Bold + Double height/width
-
-            output.write(" REPORT GIORNALIERO\n".getBytes());
-
-            output.write(ESC.getBytes());
-            output.write("!".getBytes());
-            output.write(new byte[]{0x00}); // Reset style
-
-            output.write(("Data: " + date.toString() + NEW_LINE).getBytes());
-            output.write("--------------------------------\n".getBytes());
-
-            double total = 0.0;
-            for (Booking b : bookings) {
-                String line = "- " + b.getCustomer().getName() + " (" + b.getTicket().getName() + ")\n";
-                output.write(line.getBytes());
-                total += b.getTicket().getPrice();
-            }
-
-            output.write("--------------------------------\n".getBytes());
-            output.write(("Totale prenotazioni: " + bookings.size() + NEW_LINE).getBytes());
-            output.write(("Incasso: " + String.format("%.2f", total) + " euro\n").getBytes());
-            output.write("\nGrazie!\n\n".getBytes());
-
-            output.write(ESC.getBytes());
-            output.write("d".getBytes());
-            output.write(new byte[]{0x04}); // Feed 4 lines
-
-            output.write(ESC.getBytes());
-            output.write("m".getBytes()); // Cut
-
-            byte[] data = output.toByteArray();
-            Doc doc = new SimpleDoc(new ByteArrayInputStream(data), DocFlavor.INPUT_STREAM.AUTOSENSE, null);
-
-            PrintService escposPrinter = null;
-            for (PrintService ps : PrintServiceLookup.lookupPrintServices(null, null)) {
-                if (ps.getName().toLowerCase().contains("yichip")) {
-                    escposPrinter = ps;
-                    break;
-                }
-            }
-
-            if (escposPrinter == null) {
-                System.err.println("Stampante ESC/POS non trovata");
-                return;
-            }
-
-            DocPrintJob job = escposPrinter.createPrintJob();
-            job.print(doc, new HashPrintRequestAttributeSet());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
 
     @FXML
     private void handleAddInventoryItem() {
@@ -457,7 +284,7 @@ public class DashboardController {
         report.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         report.showAndWait();
 
-        printReportToESC_POS(today, todaysBookings);
+        PrinterManager.printReport(today, todaysBookings);
     }
 
     @FXML
