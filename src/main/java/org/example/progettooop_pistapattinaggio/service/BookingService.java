@@ -11,43 +11,40 @@ public class BookingService {
 
     private static final Logger logger = LoggerManager.getLogger();
     private final Repository<Booking> bookingRepository = new Repository<>();
+
     public BookingService() {
         List<Booking> loadedBookings = DataManager.loadBookings();
         bookingRepository.setAll(loadedBookings != null ? loadedBookings : List.of());
     }
-    public boolean sellTicket(Slot slot, Customer customer, Ticket ticket, int shoeSize, int shoeQuantity, Inventory inventory, String paymentMethod) {
+
+    public boolean sellTicket(Slot slot, Customer customer, Ticket ticket, List<ShoeRental> rentedShoes, Inventory inventory, String paymentMethod){
         try {
             // Verifica la disponibilità dello slot
             if (!slot.isAvailable()) {
                 logger.warning("Slot non disponibile: " + slot);
                 return false;
             }
-
-            // Verifica la disponibilità dei pattini
-            if (!inventory.isAvailable(shoeSize, shoeQuantity)) {
-                logger.warning("Scarponi non disponibili per la taglia " + shoeSize);
-                return false;
+            // Verifica disponibilità per ogni taglia
+            for (ShoeRental rental : rentedShoes) {
+                if (!inventory.isAvailable(rental.getSize(), rental.getQuantity())) {
+                    logger.warning("Scarponi non disponibili per taglia " + rental.getSize());
+                    return false;
+                }
             }
-
             // Vendi i pattini
-            if (!inventory.sellShoes(shoeSize, shoeQuantity)) {
-                logger.warning("Impossibile vendere i pattini. Taglia " + shoeSize + ", quantità " + shoeQuantity);
-                return false;
+            for (ShoeRental rental : rentedShoes) {
+                if (!inventory.sellShoes(rental.getSize(), rental.getQuantity())) {
+                    logger.warning("Errore nella vendita: taglia " + rental.getSize());
+                    return false;
+                }
             }
-
-            // Crea la vendita (Booking)
-            Booking sale = new Booking(customer, ticket, shoeSize, shoeQuantity, paymentMethod);
-
-            // Aggiungi la prenotazione al repository
-            bookingRepository.add(sale);  // Aggiungi la prenotazione al repository
-
-            // Aggiungi la prenotazione allo slot
+            // Crea la vendita
+            Booking sale = new Booking(customer, ticket, rentedShoes, paymentMethod);
+            // Salva la prenotazione
+            bookingRepository.add(sale);
             slot.addBooking(sale);
-
-            // Registra il pagamento nel Cash Register
+            // Registra pagamento
             CashRegister.getInstance().recordPayment(ticket.getPrice(), paymentMethod);
-
-            // Log della vendita
             logger.info("Vendita completata: " + sale);
             return true;
 

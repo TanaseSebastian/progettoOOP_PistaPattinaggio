@@ -4,6 +4,7 @@ import org.example.progettooop_pistapattinaggio.model.Booking;
 import org.example.progettooop_pistapattinaggio.model.Slot;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataManager {
@@ -12,7 +13,7 @@ public class DataManager {
     public static void save(Object object, String filename) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(object);
-            System.out.println("Dati salvati correttamente nel file: " + filename);
+            //System.out.println("Dati salvati correttamente nel file: " + filename);
         } catch (IOException e) {
             System.err.println("Errore durante il salvataggio dei dati: " + e.getMessage());
             e.printStackTrace();
@@ -21,11 +22,16 @@ public class DataManager {
 
     // Carica un oggetto da un file
     public static Object load(String filename) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+        File file = new File(filename);
+        if (!file.exists()) {
+            System.err.println("📁 Il file " + filename + " non esiste, verrà creato alla prima scrittura.");
+            return null;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             return ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Errore durante il caricamento dei dati: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
@@ -48,7 +54,13 @@ public class DataManager {
 
     // Carica le prenotazioni
     public static List<Booking> loadBookings() {
-        return (List<Booking>) load("bookings.ser");
+        List<Booking> bookings = (List<Booking>) load("bookings.ser");
+        if (bookings == null) {
+            saveBookings(new ArrayList<>());  // Crea file vuoto se assente
+            System.out.println("bookings.ser creato con lista vuota.");
+            return new ArrayList<>();
+        }
+        return bookings;
     }
 
     // Salva lo Slot

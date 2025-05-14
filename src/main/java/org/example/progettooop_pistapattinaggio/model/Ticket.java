@@ -1,8 +1,8 @@
 package org.example.progettooop_pistapattinaggio.model;
 
 public interface Ticket {
-    String getName();
-    double getPrice();
-    int getValidMinutes(); // durata
-    int getMaxPeople();    // numero persone coperte
+    String getName();             // Nome leggibile
+    double getPrice();            // Prezzo
+    int getDurationMinutes();     // Durata in minuti (es. 30, 60)
+    int getMaxPeople();           // Persone coperte
 }

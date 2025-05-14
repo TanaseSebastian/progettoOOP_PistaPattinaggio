@@ -38,8 +38,10 @@
                         <columns>
                             <TableColumn fx:id="customerNameColumn" text="Cliente"/>
                             <TableColumn fx:id="ticketTypeColumn" text="Biglietto"/>
-                            <TableColumn fx:id="bookingShoeSizeColumn" text="Taglia"/>
-                            <TableColumn fx:id="bookingQuantityColumn" text="Quantità"/>
+                            <TableColumn fx:id="shoeInfoColumn" text="Taglie Noleggiate"/>
+                            <TableColumn fx:id="bookingTimeColumn" text="Data/Ora"/>
+                            <TableColumn fx:id="statusColumn" text="Stato"/>
+                            <TableColumn fx:id="timeLeftColumn" text="Minuti Rimasti"/>
                         </columns>
                     </TableView>
 
@@ -52,11 +54,16 @@
                         <Label text="Biglietto:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                         <ComboBox fx:id="ticketTypeCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                        <Label text="Taglia:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                        <TextField fx:id="bookingShoeSizeField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        <Label text="Taglia e Quantità:" GridPane.rowIndex="2" GridPane.columnIndex="0" alignment="CENTER_LEFT"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                            <TextField fx:id="bookingShoeSizeField" promptText="Taglia" prefWidth="80"/>
+                            <TextField fx:id="bookingQuantityField" promptText="Quantità" prefWidth="80"/>
+                            <Button text="➕" onAction="#handleAddShoeRental" style="-fx-font-size: 10px; -fx-padding: 2 6;"/>
+                        </HBox>
 
-                        <Label text="Quantità:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                        <TextField fx:id="bookingQuantityField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        <Label text="Pattini richiesti:" GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="TOP_LEFT"/>
+                        <ListView fx:id="shoeRentalListView" prefHeight="80" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
 
                         <Label text="Pagamento:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
                         <ComboBox fx:id="paymentMethodCombo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>

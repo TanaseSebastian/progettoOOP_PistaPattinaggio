@@ -1,30 +1,38 @@
 package org.example.progettooop_pistapattinaggio.model;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 public class Booking implements Serializable {
 
-    private static final long serialVersionUID = 1L;  // Versione serializzazione
+    private static final long serialVersionUID = 1L;
 
+    private final String id;
     private final Customer customer;
     private final Ticket ticket;
-    private final int shoeSize;  // Numero scarpa
-    private final int shoeQuantity;  // Quantità pattini
-    private final String paymentMethod;  // Metodo di pagamento
+    private final List<ShoeRental> rentedShoes;
+    private final String paymentMethod;
     private final LocalDateTime bookingTime;
+    private BookingStatus status;
 
-    // Costruttore
-    public Booking(Customer customer, Ticket ticket, int shoeSize, int shoeQuantity, String paymentMethod) {
+    public Booking(Customer customer, Ticket ticket, List<ShoeRental> rentedShoes, String paymentMethod) {
+        this.id = UUID.randomUUID().toString();
         this.customer = customer;
         this.ticket = ticket;
-        this.shoeSize = shoeSize;
-        this.shoeQuantity = shoeQuantity;
+        this.rentedShoes = rentedShoes;
         this.paymentMethod = paymentMethod;
         this.bookingTime = LocalDateTime.now();
+        this.status = BookingStatus.IN_CORSO;
     }
 
-    // Getters
+    // Getter
+    public String getId() {
+        return id;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -33,12 +41,8 @@ public class Booking implements Serializable {
         return ticket;
     }
 
-    public int getShoeSize() {
-        return shoeSize;
-    }
-
-    public int getShoeQuantity() {
-        return shoeQuantity;
+    public List<ShoeRental> getRentedShoes() {
+        return rentedShoes;
     }
 
     public String getPaymentMethod() {
@@ -49,10 +53,32 @@ public class Booking implements Serializable {
         return bookingTime;
     }
 
-    // Metodo per la stampa
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
+    }
+
+    // Timer
+    public long getMinutesRemaining() {
+        long elapsed = Duration.between(bookingTime, LocalDateTime.now()).toMinutes();
+        return Math.max(ticket.getDurationMinutes() - elapsed, 0);
+    }
+
+    public boolean isExpired() {
+        return getMinutesRemaining() == 0;
+    }
+
+    public void checkStatus() {
+        if (status == BookingStatus.IN_CORSO && isExpired()) {
+            this.status = BookingStatus.CONCLUSA;
+        }
+    }
+
     @Override
     public String toString() {
-        return customer.getName() + " ha acquistato un " + ticket.getName() +
-                " alle " + bookingTime + " [" + shoeQuantity + " pattini taglia " + shoeSize + "] - Metodo di pagamento: " + paymentMethod;
+        return "[" + id + "] " + customer.getName() + " - " + ticket.getName() + " (" + status + ")";
     }
 }
