@@ -5,13 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5acdbcbf-7b35-46c2-9494-19228777dfda" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/PrinterManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/BookingObserver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/VoiceNotifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/BookingSortStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/PriceDescendingStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/TimeLeftStrategy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookings.ser" beforeDir="false" afterPath="$PROJECT_DIR$/bookings.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory.ser" beforeDir="false" afterPath="$PROJECT_DIR$/inventory.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +27,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>

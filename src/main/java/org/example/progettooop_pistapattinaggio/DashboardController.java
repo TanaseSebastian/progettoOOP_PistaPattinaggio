@@ -1,13 +1,4 @@
 package org.example.progettooop_pistapattinaggio;
-import javax.print.*;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.io.ByteArrayInputStream;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,11 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.example.progettooop_pistapattinaggio.factory.TicketFactory;
 import org.example.progettooop_pistapattinaggio.model.*;
+import org.example.progettooop_pistapattinaggio.observer.VoiceNotifier;
 import org.example.progettooop_pistapattinaggio.service.BookingService;
+import org.example.progettooop_pistapattinaggio.strategy.BookingSortStrategy;
+import org.example.progettooop_pistapattinaggio.strategy.PriceDescendingStrategy;
 import org.example.progettooop_pistapattinaggio.util.*;
 
 import java.time.LocalDate;
@@ -50,7 +43,8 @@ public class DashboardController {
     @FXML private Label totalSales;
     @FXML private TableColumn<Booking, String> shoeInfoColumn;
     private BookingService bookingService = new BookingService();
-    private Inventory inventory = DataManager.loadInventory();  // Carica l'inventario da file JSON
+    private Inventory inventory = DataManager.loadInventory();
+    private BookingSortStrategy currentStrategy = new PriceDescendingStrategy(); // oppure new TimeLeftStrategy();
     @FXML private ListView<String> shoeRentalListView;
     private final List<ShoeRental> tempShoeRentals = new ArrayList<>();
 
@@ -87,6 +81,7 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
+        bookingService.addObserver(new VoiceNotifier());
         // Inizializza le colonne della tabella per visualizzare l'inventario
         shoeSizeColumn.setCellValueFactory(cellData -> cellData.getValue().getShoeSizeProperty().asObject());
         quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantityProperty().asObject());
@@ -250,10 +245,11 @@ public class DashboardController {
 
     @FXML
     private void handleViewBookings() {
+        bookingService.checkAllBookingStatuses();
         List<Booking> bookings = bookingService.getAllBookings();
-        bookings.forEach(Booking::checkStatus); // aggiorna stato se scaduto
-        bookingsTable.getItems().setAll(bookings);
-        DataManager.saveBookings(bookings); // salva aggiornamenti
+        List<Booking> sorted = currentStrategy.sort(bookings);
+        bookingsTable.getItems().setAll(sorted);
+        DataManager.saveBookings(sorted);
     }
 
     @FXML

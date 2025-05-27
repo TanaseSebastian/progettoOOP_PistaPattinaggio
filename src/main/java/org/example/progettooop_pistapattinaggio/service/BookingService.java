@@ -1,6 +1,7 @@
 package org.example.progettooop_pistapattinaggio.service;
 
 import org.example.progettooop_pistapattinaggio.model.*;
+import org.example.progettooop_pistapattinaggio.observer.BookingObserver;
 import org.example.progettooop_pistapattinaggio.util.*;
 
 import java.util.List;
@@ -10,11 +11,30 @@ import java.util.logging.Logger;
 public class BookingService {
 
     private static final Logger logger = LoggerManager.getLogger();
+    private final List<BookingObserver> observers = new java.util.ArrayList<>();
     private final Repository<Booking> bookingRepository = new Repository<>();
 
     public BookingService() {
         List<Booking> loadedBookings = DataManager.loadBookings();
         bookingRepository.setAll(loadedBookings != null ? loadedBookings : List.of());
+    }
+
+    public void addObserver(BookingObserver observer) {
+        observers.add(observer);
+    }
+    private void notifyBookingEnded(Booking booking) {
+        for (BookingObserver observer : observers) {
+            observer.onBookingEnded(booking);
+        }
+    }
+    public void checkAllBookingStatuses() {
+        for (Booking booking : getAllBookings()) {
+            BookingStatus previous = booking.getStatus();
+            booking.checkStatus(); // aggiorna stato
+            if (previous == BookingStatus.IN_CORSO && booking.getStatus() == BookingStatus.CONCLUSA) {
+                notifyBookingEnded(booking);
+            }
+        }
     }
 
     public boolean sellTicket(Slot slot, Customer customer, Ticket ticket, List<ShoeRental> rentedShoes, Inventory inventory, String paymentMethod){
