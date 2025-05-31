@@ -7,65 +7,106 @@ import org.example.progettooop_pistapattinaggio.util.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
+/**
+ * Servizio che gestisce le prenotazioni, le vendite dei biglietti,
+ * l'inventario degli scarponi e la notifica degli osservatori al termine delle prenotazioni.
+ */
 public class BookingService {
 
     private static final Logger logger = LoggerManager.getLogger();
-    private final List<BookingObserver> observers = new java.util.ArrayList<>();
+    private final List<BookingObserver> observers = new ArrayList<>();
     private final Repository<Booking> bookingRepository = new Repository<>();
+    private final PistaDiPattinaggio pista;
 
-    public BookingService() {
-        List<Booking> loadedBookings = DataManager.loadBookings();
-        bookingRepository.setAll(loadedBookings != null ? loadedBookings : List.of());
+    /**
+     * Costruttore che inizializza il servizio e carica le prenotazioni da file.
+     */
+    public BookingService(PistaDiPattinaggio pista, boolean loadFromFile) {
+        this.pista = pista;
+        if (loadFromFile) {
+            List<Booking> loadedBookings = DataManager.loadBookings();
+            bookingRepository.setAll(loadedBookings != null ? loadedBookings : List.of());
+        }
     }
 
+    /**
+     * Aggiunge un osservatore da notificare quando una prenotazione termina.
+     * @param observer l'osservatore da aggiungere
+     */
     public void addObserver(BookingObserver observer) {
         observers.add(observer);
     }
+
+    /**
+     * Notifica tutti gli osservatori che una prenotazione è terminata.
+     * @param booking la prenotazione conclusa
+     */
     private void notifyBookingEnded(Booking booking) {
         for (BookingObserver observer : observers) {
             observer.onBookingEnded(booking);
         }
     }
-    public void checkAllBookingStatuses() {
+
+    /**
+     * Aggiorna lo stato delle prenotazioni e notifica se necessario.
+     *
+     * @param notify se {@code true}, notifica le prenotazioni concluse
+     */
+    public void checkAllBookingStatuses(boolean notify) {
         for (Booking booking : getAllBookings()) {
             BookingStatus previous = booking.getStatus();
-            booking.checkStatus(); // aggiorna stato
+            booking.checkStatus();
             if (previous == BookingStatus.IN_CORSO && booking.getStatus() == BookingStatus.CONCLUSA) {
-                notifyBookingEnded(booking);
+                if (notify) {
+                    notifyBookingEnded(booking);
+                }
             }
         }
     }
 
-    public boolean sellTicket(Slot slot, Customer customer, Ticket ticket, List<ShoeRental> rentedShoes, Inventory inventory, String paymentMethod){
+    /**
+     * Tenta di vendere un biglietto per una prenotazione, gestendo l'inventario e registrando il pagamento.
+     *
+     * @param booking   la prenotazione da completare
+     * @param inventory l'inventario da cui sottrarre scarponi eventualmente noleggiati
+     * @return true se la vendita è andata a buon fine, false altrimenti
+     */
+    public boolean sellTicket(Booking booking, Inventory inventory) {
         try {
-            // Verifica la disponibilità dello slot
+            Slot slot = booking.getSlot();
+            PistaDiPattinaggio pista = booking.getPista();
+
+            if (!pista.getSlotsDisponibili().contains(slot)) {
+                logger.warning("Slot non valido per la pista selezionata.");
+                return false;
+            }
+
             if (!slot.isAvailable()) {
                 logger.warning("Slot non disponibile: " + slot);
                 return false;
             }
-            // Verifica disponibilità per ogni taglia
-            for (ShoeRental rental : rentedShoes) {
+
+            for (ShoeRental rental : booking.getRentedShoes()) {
                 if (!inventory.isAvailable(rental.getSize(), rental.getQuantity())) {
                     logger.warning("Scarponi non disponibili per taglia " + rental.getSize());
                     return false;
                 }
             }
-            // Vendi i pattini
-            for (ShoeRental rental : rentedShoes) {
+
+            for (ShoeRental rental : booking.getRentedShoes()) {
                 if (!inventory.sellShoes(rental.getSize(), rental.getQuantity())) {
                     logger.warning("Errore nella vendita: taglia " + rental.getSize());
                     return false;
                 }
             }
-            // Crea la vendita
-            Booking sale = new Booking(customer, ticket, rentedShoes, paymentMethod);
-            // Salva la prenotazione
-            bookingRepository.add(sale);
-            slot.addBooking(sale);
-            // Registra pagamento
-            CashRegister.getInstance().recordPayment(ticket.getPrice(), paymentMethod);
-            logger.info("Vendita completata: " + sale);
+
+            bookingRepository.add(booking);
+            slot.addBooking(booking);
+            CashRegister.getInstance().recordPayment(booking.getTicket().getPrice(), booking.getPaymentMethod());
+            logger.info("Vendita completata: " + booking);
             return true;
 
         } catch (Exception e) {
@@ -74,25 +115,48 @@ public class BookingService {
         }
     }
 
-
-    public Optional<Slot> findNextAvailableSlot(Day day, int minCapacity) {
-        for (Slot slot : day) {
-            int postiLiberi = slot.getCapacity() -
-                    slot.getBookings().stream().mapToInt(b -> b.getTicket().getMaxPeople()).sum();
-
-            if (postiLiberi >= minCapacity) {
-                return Optional.of(slot);
-            }
-        }
-        return Optional.empty();
+    /**
+     * Trova il prossimo slot disponibile su una pista specifica, che abbia almeno una certa capienza libera.
+     *
+     * @param pista       la pista da analizzare
+     * @param minCapacity capacità minima richiesta
+     * @return uno slot disponibile, se esiste
+     */
+    public Optional<Slot> findNextAvailableSlot(PistaDiPattinaggio pista, int minCapacity) {
+        return pista.getSlotsDisponibili().stream()
+                .filter(Slot::isAvailable)
+                .filter(slot -> (slot.getCapacity() - slot.getBookings().stream()
+                        .mapToInt(b -> b.getTicket().getMaxPeople()).sum()) >= minCapacity)
+                .findFirst();
     }
 
+    /**
+     * Restituisce gli slot disponibili per una pista specifica.
+     *
+     * @param pista la pista selezionata
+     * @return lista degli slot disponibili
+     */
+    public List<Slot> getSlotDisponibili(PistaDiPattinaggio pista) {
+        return pista.getSlotsDisponibili().stream()
+                .filter(Slot::isAvailable)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Restituisce tutte le prenotazioni salvate.
+     *
+     * @return lista delle prenotazioni
+     */
     public List<Booking> getAllBookings() {
         return bookingRepository.getAll();
     }
 
+    /**
+     * Aggiunge una nuova prenotazione all'elenco.
+     *
+     * @param booking la prenotazione da aggiungere
+     */
     public void addBooking(Booking booking) {
         bookingRepository.add(booking);
     }
-
 }

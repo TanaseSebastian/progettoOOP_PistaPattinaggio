@@ -5,12 +5,24 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Rappresenta uno slot temporale disponibile per l'accesso alla pista di pattinaggio.
+ * Ogni slot ha un orario di inizio, una durata, una capacità massima e una lista di prenotazioni associate.
+ */
 public class Slot implements Serializable {
+
     private final LocalDateTime startTime;
     private final int durationMinutes;
-    private final int capacity; // max persone
+    private final int capacity;
     private final List<Booking> bookings;
 
+    /**
+     * Costruisce un nuovo {@code Slot} con i parametri specificati.
+     *
+     * @param startTime        orario di inizio dello slot
+     * @param durationMinutes  durata dello slot in minuti
+     * @param capacity         capacità massima di persone ammesse nello slot
+     */
     public Slot(LocalDateTime startTime, int durationMinutes, int capacity) {
         this.startTime = startTime;
         this.durationMinutes = durationMinutes;
@@ -18,10 +30,14 @@ public class Slot implements Serializable {
         this.bookings = new ArrayList<>();
     }
 
-    // Controlla se lo slot è disponibile
+    /**
+     * Verifica se lo slot è disponibile, ovvero se non ha ancora raggiunto la capacità massima.
+     *
+     * @return {@code true} se c'è ancora disponibilità, altrimenti {@code false}
+     */
     public boolean isAvailable() {
         if (capacity == 0) {
-            return false; // Se la capacità è 0, lo slot è sempre pieno
+            return false;
         }
         int totalPeople = bookings.stream()
                 .mapToInt(b -> b.getTicket().getMaxPeople())
@@ -29,7 +45,12 @@ public class Slot implements Serializable {
         return totalPeople < capacity;
     }
 
-    // Aggiungi la prenotazione allo slot
+    /**
+     * Aggiunge una prenotazione allo slot, se c'è disponibilità.
+     *
+     * @param booking la prenotazione da aggiungere
+     * @throws IllegalStateException se lo slot è già pieno
+     */
     public void addBooking(Booking booking) {
         if (!isAvailable()) {
             throw new IllegalStateException("Slot pieno, impossibile aggiungere prenotazione.");
@@ -37,26 +58,47 @@ public class Slot implements Serializable {
         bookings.add(booking);
     }
 
-    // Restituisci tutte le prenotazioni associate allo slot
+    /**
+     * Restituisce la lista delle prenotazioni associate a questo slot.
+     *
+     * @return lista delle prenotazioni
+     */
     public List<Booking> getBookings() {
         return bookings;
     }
 
-    // Restituisci l'orario di inizio dello slot
+    /**
+     * Restituisce l'orario di inizio dello slot.
+     *
+     * @return orario di inizio
+     */
     public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    // Restituisci la durata in minuti dello slot
+    /**
+     * Restituisce la durata dello slot in minuti.
+     *
+     * @return durata in minuti
+     */
     public int getDurationMinutes() {
         return durationMinutes;
     }
 
-    // Restituisci la capacità massima dello slot
+    /**
+     * Restituisce la capacità massima di persone ammesse nello slot.
+     *
+     * @return capacità massima
+     */
     public int getCapacity() {
         return capacity;
     }
 
+    /**
+     * Restituisce una rappresentazione testuale dello slot, utile per interfacce e log.
+     *
+     * @return stringa descrittiva dello slot
+     */
     @Override
     public String toString() {
         return startTime + " (" + durationMinutes + " min, max " + capacity + " persone)";

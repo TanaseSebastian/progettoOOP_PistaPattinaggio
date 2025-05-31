@@ -64,12 +64,17 @@
                         <Label text="Pattini richiesti:" GridPane.rowIndex="3" GridPane.columnIndex="0" alignment="TOP_LEFT"/>
                         <ListView fx:id="shoeRentalListView" prefHeight="80" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
+                        <Label text="Pista:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="pistaComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                        <Label text="Pagamento:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                        <ComboBox fx:id="paymentMethodCombo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                        <Label text="Orario Slot:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="slotComboBox" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                        <Label text="Pagamento:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                        <ComboBox fx:id="paymentMethodCombo" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
 
                         <Button text="Crea Prenotazione" onAction="#handleCreateBooking"
-                                GridPane.rowIndex="5" GridPane.columnIndex="1"
+                                GridPane.rowIndex="7" GridPane.columnIndex="1"
                                 styleClass="btn-success"/>
                     </GridPane>
                 </VBox>

@@ -1,100 +1,121 @@
 package org.example.progettooop_pistapattinaggio;
 
+import org.example.progettooop_pistapattinaggio.factory.PistaBuilder;
+import org.example.progettooop_pistapattinaggio.factory.TicketFactory;
 import org.example.progettooop_pistapattinaggio.model.*;
 import org.example.progettooop_pistapattinaggio.service.BookingService;
-import org.example.progettooop_pistapattinaggio.factory.TicketFactory;
-import org.example.progettooop_pistapattinaggio.util.Inventory;
 import org.example.progettooop_pistapattinaggio.util.CashRegister;
+import org.example.progettooop_pistapattinaggio.util.Inventory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test per la classe BookingService.
+ */
 class BookingServiceTest {
 
     private BookingService bookingService;
+    private PistaDiPattinaggio pista;
     private Slot slot;
     private Customer customer;
     private Ticket ticket;
     private Inventory inventory;
     private CashRegister cashRegister;
 
+    /**
+     * Imposta l’ambiente di test creando una pista con slot, cliente,
+     * biglietto, inventario e registratore di cassa inizializzati.
+     */
     @BeforeEach
     void setUp() {
-        // Setup test data
-        bookingService = new BookingService();
-        slot = new Slot(LocalDateTime.now(), 60, 10); // Slot da 60 min con capienza 10
-        customer = new Customer("Mario Rossi", 35, "3331234567", true); // Cliente
-        ticket = TicketFactory.createTicket("single30"); // Usa TicketFactory per creare il biglietto
+        pista = new PistaBuilder()
+                .setNome("Pista Test")
+                .setIndirizzo("Via dei Test")
+                .setTipo("indoor")
+                .setSuperficieMq(500)
+                .setCoperta(true)
+                .setNote("Pista di test")
+                .configuraSlotGiornalieri(18, 22, 60, 50)
+                .build();
+
+        bookingService = new BookingService(pista, false);
+        slot = pista.getSlotsDisponibili().get(0);
+        customer = new Customer("Mario Rossi", 35, "3331234567", true);
+        ticket = TicketFactory.createTicket("single30");
+
         inventory = new Inventory();
-        inventory.addShoes(36, 10);  // Aggiungi 10 pattini della taglia 36
-        cashRegister = CashRegister.getInstance(); // Usa il Singleton del Cash Register
+        inventory.addShoes(36, 10);
+
+        cashRegister = CashRegister.getInstance();
         cashRegister.resetPayments();
     }
 
     @Test
     void testSellTicketSuccess() {
-        // Vendi il biglietto e registra la vendita
-        boolean result = bookingService.sellTicket(slot, customer, ticket, 36, 1, inventory, "Cash");
-
-        // Verifica che la vendita sia riuscita
-        assertTrue(result, "La vendita dovrebbe riuscire.");
-        assertEquals(1, slot.getBookings().size(), "Lo slot dovrebbe avere una prenotazione.");
-        assertEquals(9, inventory.getShoesQuantity(36), "L'inventario dei pattini taglia 36 dovrebbe essere aggiornato.");
+        Booking booking = new Booking(customer, ticket, List.of(new ShoeRental(36, 1)), "Cash", slot, pista);
+        boolean result = bookingService.sellTicket(booking, inventory);
+        assertTrue(result);
+        assertEquals(1, slot.getBookings().size());
+        assertEquals(9, inventory.getShoesQuantity(36));
     }
 
     @Test
     void testSellTicketFailureDueToNoShoes() {
-        // Proviamo a vendere più scarponi di quelli disponibili
-        inventory.addShoes(32, 1);
-        boolean result = bookingService.sellTicket(slot, customer, ticket, 32, inventory.getShoesQuantity(36)+1, inventory, "Card");
-        // Verifica che la vendita fallisca per mancanza di pattini
-        assertFalse(result, "La vendita non dovrebbe riuscire, pattini insufficienti.");
+        Booking booking = new Booking(customer, ticket, List.of(new ShoeRental(32, 5)), "Card", slot, pista);
+        boolean result = bookingService.sellTicket(booking, inventory);
+        assertFalse(result);
     }
 
     @Test
     void testSellTicketFailureDueToSlotFull() {
-        // Impostiamo uno slot con zero posti disponibili
-        Slot fullSlot = new Slot(LocalDateTime.now(), 60, 0);
-        boolean result = bookingService.sellTicket(fullSlot, customer, ticket, 36, 1, inventory, "Cash");
-
-        // Verifica che la vendita fallisca per slot pieno
-        assertFalse(result, "La vendita non dovrebbe riuscire, slot pieno.");
+        Slot fullSlot = new Slot(slot.getStartTime(), slot.getDurationMinutes(), 0);
+        Booking booking = new Booking(customer, ticket, List.of(new ShoeRental(36, 1)), "Cash", fullSlot, pista);
+        boolean result = bookingService.sellTicket(booking, inventory);
+        assertFalse(result);
     }
 
     @Test
     void testCashRegisterRecordPayment() {
-        // Vendi un biglietto e registra l'incasso
-        boolean result = bookingService.sellTicket(slot, customer, ticket, 36, 1, inventory, "Cash");
+        Booking bookingCash = new Booking(customer, ticket, List.of(new ShoeRental(36, 1)), "Cash", slot, pista);
+        boolean result = bookingService.sellTicket(bookingCash, inventory);
+        assertTrue(result);
+        assertEquals(1, cashRegister.getPaymentMethods().get("Cash"));
+        assertEquals(ticket.getPrice(), cashRegister.getTotalCash());
 
-        // Verifica che il pagamento in contante sia stato registrato nel Cash Register
-        assertTrue(result, "La vendita dovrebbe riuscire.");
-        assertEquals(1, cashRegister.getPaymentMethods().get("Cash"), "Il pagamento in contante dovrebbe essere registrato una volta.");
-        assertEquals(ticket.getPrice(), cashRegister.getTotalCash(), "L'importo incassato dovrebbe essere uguale al prezzo del biglietto.");
-
-        // Vendi un altro biglietto con pagamento "Card"
-        bookingService.sellTicket(slot, customer, ticket, 36, 1, inventory, "Card");
-
-        // Verifica che il pagamento con carta sia stato registrato nel Cash Register
-        assertEquals(1, cashRegister.getPaymentMethods().get("Card"), "Il pagamento con carta dovrebbe essere registrato una volta.");
-        assertEquals(ticket.getPrice(), cashRegister.getTotalCard(), "L'importo incassato con carta dovrebbe essere uguale al prezzo del biglietto.");
+        Booking bookingCard = new Booking(customer, ticket, List.of(new ShoeRental(36, 1)), "Card", slot, pista);
+        bookingService.sellTicket(bookingCard, inventory);
+        assertEquals(1, cashRegister.getPaymentMethods().get("Card"));
+        assertEquals(ticket.getPrice(), cashRegister.getTotalCard());
     }
-
-
 
     @Test
     void testGetAllBookings() {
-        // Vendi un biglietto
-        bookingService.sellTicket(slot, customer, ticket, 36, 1, inventory, "Card");
+        PistaDiPattinaggio nuovaPista = new PistaBuilder()
+                .setNome("Pista Isolata")
+                .setIndirizzo("Via isolata")
+                .setTipo("indoor")
+                .setSuperficieMq(300)
+                .setCoperta(true)
+                .setNote("Test isolato")
+                .configuraSlotGiornalieri(18, 22, 60, 50)
+                .build();
 
-        // Recuperiamo tutte le prenotazioni
-        List<Booking> bookings = bookingService.getAllBookings();
+        BookingService bookingServiceIsolato = new BookingService(nuovaPista, false);
+        Inventory inventarioIsolato = new Inventory();
+        inventarioIsolato.addShoes(36, 10);
+        Slot slotIsolato = nuovaPista.getSlotsDisponibili().get(0);
 
-        // Verifica che ci sia almeno una prenotazione
-        assertEquals(1, bookings.size(), "Dovrebbe esserci almeno una prenotazione.");
-        assertEquals(customer.getName(), bookings.get(0).getCustomer().getName(), "Il cliente della prenotazione dovrebbe essere 'Mario Rossi'.");
+        Ticket nuovoTicket = TicketFactory.createTicket("single30");
+        Customer customerIsolato = new Customer("Luca Verdi", 30, "3339876543", true);
+        Booking booking = new Booking(customerIsolato, nuovoTicket, List.of(new ShoeRental(36, 1)), "Card", slotIsolato, nuovaPista);
+        bookingServiceIsolato.sellTicket(booking, inventarioIsolato);
+
+        List<Booking> bookings = bookingServiceIsolato.getAllBookings();
+        assertEquals(1, bookings.size());
+        assertEquals("Luca Verdi", bookings.get(0).getCustomer().getName());
     }
 }

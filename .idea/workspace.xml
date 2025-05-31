@@ -5,18 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5acdbcbf-7b35-46c2-9494-19228777dfda" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/BookingObserver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/VoiceNotifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/BookingSortStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/PriceDescendingStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/TimeLeftStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/SlotFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaMultipla.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookings.ser" beforeDir="false" afterPath="$PROJECT_DIR$/bookings.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cashRegister.ser" beforeDir="false" afterPath="$PROJECT_DIR$/cashRegister.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inventory.ser" beforeDir="false" afterPath="$PROJECT_DIR$/inventory.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot.ser" beforeDir="false" afterPath="$PROJECT_DIR$/slot.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/DashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/PistaBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/factory/TicketFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/iterator/SlotIterator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/iterator/SlotIterator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/BookingStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/BookingStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/CustomTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/CustomTicket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Day.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaDiPattinaggio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaDiPattinaggio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaIndoor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/PistaBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/ShoeRental.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/ShoeRental.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Slot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/model/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/BookingObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/BookingObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/VoiceNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/observer/VoiceNotifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/service/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/BookingSortStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/BookingSortStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/PriceDescendingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/PriceDescendingStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/TimeLeftStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/strategy/TimeLeftStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/CashRegister.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/CashRegister.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Inventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/InventoryItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/InventoryItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/LoggerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/LoggerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/PrinterManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/PrinterManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/progettooop_pistapattinaggio/util/Repository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/dashboard-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/progettooop_pistapattinaggio/dashboard-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/progettooop_pistapattinaggio/BookingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/progettooop_pistapattinaggio/BookingServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/progettooop_pistapattinaggio/TestDataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/progettooop_pistapattinaggio/TestDataManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,8 +81,11 @@
     "Application.HelloApplication.executor": "Run",
     "JUnit.BookingServiceTest.executor": "Run",
     "JUnit.BookingServiceTest.testCashRegisterRecordPayment.executor": "Run",
+    "JUnit.BookingServiceTest.testGetAllBookings.executor": "Run",
     "JUnit.BookingServiceTest.testSellTicketFailureDueToNoShoes.executor": "Run",
     "JUnit.TestDataManager.executor": "Run",
+    "JUnit.TestDataManager.testSaveAndLoadCashRegister.executor": "Run",
+    "JUnit.TestDataManager.testSaveAndLoadInventory.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
@@ -105,7 +133,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BookingServiceTest.testCashRegisterRecordPayment" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BookingServiceTest.testGetAllBookings" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="progettoOOP_PistaPattinaggio" />
       <extension name="coverage">
         <pattern>
@@ -115,23 +143,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="org.example.progettooop_pistapattinaggio" />
       <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.BookingServiceTest" />
-      <option name="METHOD_NAME" value="testCashRegisterRecordPayment" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BookingServiceTest.testSellTicketFailureDueToNoShoes" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="progettoOOP_PistaPattinaggio" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.progettooop_pistapattinaggio.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.example.progettooop_pistapattinaggio" />
-      <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.BookingServiceTest" />
-      <option name="METHOD_NAME" value="testSellTicketFailureDueToNoShoes" />
+      <option name="METHOD_NAME" value="testGetAllBookings" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -152,13 +164,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestDataManager.testSaveAndLoadInventory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="progettoOOP_PistaPattinaggio" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.progettooop_pistapattinaggio.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.progettooop_pistapattinaggio" />
+      <option name="MAIN_CLASS_NAME" value="org.example.progettooop_pistapattinaggio.TestDataManager" />
+      <option name="METHOD_NAME" value="testSaveAndLoadInventory" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.HelloApplication" />
-        <item itemvalue="JUnit.TestDataManager" />
         <item itemvalue="JUnit.BookingServiceTest" />
-        <item itemvalue="JUnit.BookingServiceTest.testCashRegisterRecordPayment" />
-        <item itemvalue="JUnit.BookingServiceTest.testSellTicketFailureDueToNoShoes" />
+        <item itemvalue="JUnit.BookingServiceTest.testGetAllBookings" />
+        <item itemvalue="JUnit.TestDataManager" />
+        <item itemvalue="JUnit.TestDataManager.testSaveAndLoadInventory" />
       </list>
     </recent_temporary>
   </component>

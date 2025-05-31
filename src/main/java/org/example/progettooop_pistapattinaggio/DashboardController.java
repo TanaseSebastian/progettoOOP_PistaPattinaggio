@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
+import org.example.progettooop_pistapattinaggio.factory.PistaBuilder;
 import org.example.progettooop_pistapattinaggio.factory.TicketFactory;
 import org.example.progettooop_pistapattinaggio.model.*;
 import org.example.progettooop_pistapattinaggio.observer.VoiceNotifier;
@@ -19,6 +20,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller principale della dashboard dell'applicazione di gestione pista pattinaggio.
+ * Gestisce l'interfaccia utente, le prenotazioni, l'inventario e la logica di stampa.
+ */
 public class DashboardController {
 
     // Tabella per l'inventario
@@ -38,11 +43,12 @@ public class DashboardController {
     @FXML private TextField bookingShoeSizeField;
     @FXML private TextField bookingQuantityField;
     @FXML private ComboBox<String> paymentMethodCombo;
+    @FXML private ComboBox<Slot> slotComboBox;
 
 
     @FXML private Label totalSales;
     @FXML private TableColumn<Booking, String> shoeInfoColumn;
-    private BookingService bookingService = new BookingService();
+    private BookingService bookingService;
     private Inventory inventory = DataManager.loadInventory();
     private BookingSortStrategy currentStrategy = new PriceDescendingStrategy(); // oppure new TimeLeftStrategy();
     @FXML private ListView<String> shoeRentalListView;
@@ -51,6 +57,11 @@ public class DashboardController {
     @FXML private TableColumn<Booking, String> bookingTimeColumn;
     @FXML private TableColumn<Booking, String> statusColumn;
     @FXML private TableColumn<Booking, String> timeLeftColumn;
+
+    @FXML private ComboBox<String> pistaComboBox;
+
+    private PistaMultipla pistaMultipla;
+    private boolean firstLoad = true;
 
     @FXML
     private void handleAddShoeRental() {
@@ -81,6 +92,32 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
+        // Creazione piste base tramite builder
+        PistaDiPattinaggio pistaA = new PistaBuilder()
+                .setNome("Pista A")
+                .setIndirizzo("Via Roma 1")
+                .setTipo("indoor")
+                .setCapienzaMassima(300)
+                .setNote("Pista principale")
+                .configuraSlotGiornalieri(10, 20, 60, 100)
+                .build();
+
+        PistaDiPattinaggio pistaB = new PistaBuilder()
+                .setNome("Pista B")
+                .setIndirizzo("Via Roma 1b")
+                .setTipo("indoor")
+                .setCapienzaMassima(250)
+                .setNote("Seconda pista coperta con accesso disabili")
+                .configuraSlotGiornalieri(10, 20, 60, 100)
+                .build();
+
+        // Costruzione di pista multipla
+        pistaMultipla = new PistaMultipla("Centro Pattinaggio", "Via Centrale");
+        pistaMultipla.aggiungiPista(pistaA);
+        pistaMultipla.aggiungiPista(pistaB);
+
+        // Inizializza il servizio di prenotazione
+        bookingService = new BookingService(pistaMultipla, true);
         bookingService.addObserver(new VoiceNotifier());
         // Inizializza le colonne della tabella per visualizzare l'inventario
         shoeSizeColumn.setCellValueFactory(cellData -> cellData.getValue().getShoeSizeProperty().asObject());
@@ -93,6 +130,38 @@ public class DashboardController {
                     .orElse("-");
             return new javafx.beans.property.SimpleStringProperty(descrizione);
         });
+
+
+
+        // Popola la combo delle piste
+        pistaComboBox.getItems().addAll(
+                pistaMultipla.getPiste().stream()
+                        .map(PistaDiPattinaggio::getNome)
+                        .toList()
+        );
+
+        // Quando selezioni una pista, carica gli slot di quella pista
+        pistaComboBox.setOnAction(event -> {
+            String nome = pistaComboBox.getValue();
+            if (nome != null) {
+                PistaDiPattinaggio selezionata = pistaMultipla.getPistaByNome(nome);
+                if (selezionata != null) {
+                    List<Slot> disponibili = bookingService.getSlotDisponibili(selezionata);
+                    slotComboBox.getItems().setAll(disponibili);
+                }
+            }
+        });
+
+        //popola gli slot
+        slotComboBox.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(Slot slot, boolean empty) {
+                super.updateItem(slot, empty);
+                setText(empty || slot == null ? null : slot.toString());
+            }
+        });
+        slotComboBox.setButtonCell(slotComboBox.getCellFactory().call(null));
+
         // Popola la tabella con i dati dell'inventario
         inventoryTable.getItems().setAll(inventory.getInventoryList());
 
@@ -148,6 +217,10 @@ public class DashboardController {
         System.out.println("Aggiungi una nuova prenotazione");
     }
 
+    /**
+     * Gestisce l'inserimento di una nuova prenotazione, validando i dati e aggiornando la UI.
+     * Mostra un alert e stampa uno scontrino in caso di successo.
+     */
     @FXML
     private void handleCreateBooking() {
         try {
@@ -174,8 +247,14 @@ public class DashboardController {
             Customer customer = new Customer(customerName);
             Ticket ticket = TicketFactory.createTicket(ticketType);
 
-            Booking booking = new Booking(customer, ticket, shoes, paymentMethod);
-            bookingService.addBooking(booking);
+            Slot slot = slotComboBox.getValue();
+            if (slot == null) throw new IllegalArgumentException("Seleziona uno slot orario.");
+            String nomeSelezionato = pistaComboBox.getValue();
+            PistaDiPattinaggio pistaSelezionata = pistaMultipla.getPistaByNome(nomeSelezionato);
+            Booking booking = new Booking(customer, ticket, shoes, paymentMethod, slot, pistaSelezionata);
+            boolean success = bookingService.sellTicket(booking, inventory);
+            if (!success) throw new RuntimeException("Errore durante la prenotazione");
+
             for (ShoeRental sr : shoes) {
                 inventory.sellShoes(sr.getSize(), sr.getQuantity());
             }
@@ -242,16 +321,29 @@ public class DashboardController {
         }
     }
 
-
+    /**
+     * Aggiorna la tabella delle prenotazioni applicando la strategia di ordinamento selezionata.
+     * Se è il primo caricamento, evita le notifiche vocali.
+     */
     @FXML
     private void handleViewBookings() {
-        bookingService.checkAllBookingStatuses();
+        if (firstLoad) {
+            // Al primo caricamento non notificare
+            bookingService.checkAllBookingStatuses(false); // ← passiamo false
+            firstLoad = false;
+        } else {
+            bookingService.checkAllBookingStatuses(true); // ← notifiche attive
+        }
+
         List<Booking> bookings = bookingService.getAllBookings();
         List<Booking> sorted = currentStrategy.sort(bookings);
         bookingsTable.getItems().setAll(sorted);
         DataManager.saveBookings(sorted);
     }
 
+    /**
+     * Stampa un report riepilogativo delle prenotazioni della giornata.
+     */
     @FXML
     private void handleGenerateReport() {
         List<Booking> allBookings = bookingService.getAllBookings();
