@@ -1,3 +1,4 @@
+
 # ⛸ Gestionale Pista di Pattinaggio – Progetto OOP Java SE
 
 ### 🏫 Università / Corso
@@ -9,135 +10,156 @@
 ---
 
 ## 🚀 Obiettivo del Progetto
-
-Sviluppare un’applicazione desktop con **Java SE e JavaFX** per la gestione di una pista di pattinaggio, implementando i principali concetti OOP e Design Pattern, oltre a funzionalità pratiche per il noleggio, prenotazione e vendita biglietti.
+Realizzare un gestionale desktop in **Java SE 17** e **JavaFX** che supporti la vendita di biglietti, la prenotazione di slot orari e la gestione del noleggio pattini per una pista di pattinaggio.  
+Il codice è scritto seguendo i principi **OOP** e fa largo uso di **Design Pattern** per garantire chiarezza, riusabilità ed estendibilità.
 
 ---
 
 ## ✅ Funzionalità implementate
-
-- Emissione biglietti (singoli, famiglia, personalizzati)
-- Prenotazione slot orari con visione settimanale
-- Gestione anagrafica clienti
-- Noleggio pattini con gestione taglie
-- Calcolo incassi giornalieri
-- Persistenza dati su file `.ser`
-- Interfaccia utente semplice in JavaFX
-- Logging interno
-- Test unitari su componenti core
-
----
-
-## 🧠 Design Pattern usati
-
-| Pattern              | Classe / Utilizzo                                                       |
-|----------------------|-------------------------------------------------------------------------|
-| **Factory**          | `TicketFactory` per la creazione dinamica di biglietti                  |
-| **Iterator**         | `SlotIterator` per scorrere gli slot disponibili                        |
-| **Builder** (β)      | `TicketBuilder` per costruire step-by-step biglietti complessi          |
-| **Singleton** (β)    | `CashRegister` per mantenere un’unica istanza degli incassi             |
-| **Exception Shielding** | Gestione errori in `BookingService`, `DashboardController`, `DataManager` |
-| **(Da integrare)** Composite | Menzione nel design iniziale, **non presente nel codice** attuale |
-| **(Assenti)** Strategy / Observer | Non implementati – candidati ideali per sviluppo futuro      |
+- Emissione biglietti pre‑configurati e personalizzati (`TicketFactory`)
+- Prenotazione slot orari con generazione automatica giornaliera (`SlotFactory`)
+- Noleggio pattini con inventario taglie in tempo reale
+- Calcolo incassi con **cassa centralizzata** (`CashRegister`)
+- **Stampa scontrino ESC/POS** con QR‑Code e taglio carta
+- Stampa **report giornaliero** degli incassi
+- Persistenza automatica dati su file `.ser`
+- Logging centralizzato (`LoggerManager`)
+- Notifica vocale (Observer) a fine corsa
+- Interfaccia JavaFX (FXML) semplice e intuitiva
+- Test JUnit su componenti core
 
 ---
 
-## ⚙️ Tecnologie e concetti Java usati
+## 🧠 Design Pattern utilizzati
 
-- **Java SE** (17+)
-- **JavaFX** per l’interfaccia grafica
-- **Java Collections & Generics**
-- **Java I/O** con `ObjectOutputStream`/`ObjectInputStream`
-- **Logging** con `java.util.logging`
-- **JUnit** per test unitari
-- **Architettura MVC semplificata**
-- **Uso base di Lambda/Stream API** (da potenziare)
-
----
-
-## 📐 Diagramma UML – Struttura Classi Principali
-
-![UML Diagramma](/mnt/data/UMLDiagram.png)
-
-> Rappresenta le principali classi, i pattern core (Factory, Singleton, Iterator) e le dipendenze tra componenti centrali.
+| Pattern        | Classe / Scopo                                                       |
+|----------------|----------------------------------------------------------------------|
+| **Factory**    | `TicketFactory`, `SlotFactory` – creazione biglietti / slot          |
+| **Builder**    | `PistaBuilder` – costruzione piste e configurazione slot             |
+| **Singleton**  | `CashRegister`, `LoggerManager` – istanza unica di cassa / logger    |
+| **Iterator**   | `SlotIterator` – iterazione sugli slot disponibili                   |
+| **Observer**   | `BookingObserver` + `VoiceNotifier` – notifica fine prenotazione     |
+| **Strategy**   | `BookingSortStrategy` – ordinamento prenotazioni in UI               |
+| **Exception Shielding** | Try‑catch mirati in `BookingService`, `DataManager`, `DashboardController` |
 
 ---
 
-## 📁 Struttura del codice
+## ⚙️ Tecnologie e librerie
 
+- **Java SE 17**
+- **JavaFX 18** (FXML, CSS)
+- **Collections & Generics**
+- **Stream / Lambda API**
+- **Serialization I/O** (`ObjectOutputStream` / `ObjectInputStream`)
+- **ZXing** per generare QR‑Code
+- **javax.print** per invio ESC/POS
+- **java.util.logging**
+- **JUnit 5** per il testing
+
+---
+
+## 📐 Diagramma UML (classi principali)
+
+![UML Diagramma](/UMLDiagram.png)
+
+> Rappresenta Controller, Service, Model, Factory, Builder, Iterator, Singleton e Observer.
+
+---
+
+## 📁 Struttura del progetto
+
+```
+src/
 ├── controller/
-│ └── DashboardController.java
+│   └── DashboardController.java
 ├── factory/
-│ ├── TicketFactory.java
-│ └── TicketBuilder.java
+│   ├── TicketFactory.java
+│   ├── SlotFactory.java
+│   └── PistaBuilder.java
 ├── iterator/
-│ └── SlotIterator.java
+│   └── SlotIterator.java
 ├── model/
-│ ├── Booking.java, Customer.java, Ticket.java, Slot.java, ...
+│   ├── Booking.java
+│   ├── Customer.java
+│   ├── Slot.java
+│   ├── PistaBase.java / PistaMultipla.java
+│   └── Ticket (interface) + CustomTicket.java
+├── observer/
+│   ├── BookingObserver.java
+│   └── VoiceNotifier.java
 ├── service/
-│ └── BookingService.java
+│   └── BookingService.java
 ├── util/
-│ ├── DataManager.java, CashRegister.java, LoggerManager.java, ...
-├── test/
-│ ├── BookingServiceTest.java, TestDataManager.java
+│   ├── CashRegister.java
+│   ├── DataManager.java
+│   ├── Inventory.java + InventoryItem.java
+│   ├── PrinterManager.java
+│   └── LoggerManager.java
+└── test/
+    ├── BookingServiceTest.java
+    └── DataManagerTest.java
+```
 
 ---
 
-## 🧪 Testing
+## 🖨️ Stampa ESC/POS
+Alla conferma di ogni prenotazione viene generato uno scontrino compatibile **ESC/POS** con:
+- Dati cliente, tipo biglietto, prezzo e metodo di pagamento
+- Elenco taglie pattini noleggiati
+- **QR‑Code** con ID prenotazione
+- Cut‑command finale
 
-- ✅ **JUnit** utilizzato per unit test
-- ✅ Test presenti per `BookingService` e `DataManager`
-- 🔜 Da estendere a `TicketFactory`, `Slot`, `CashRegister`, ecc.
-
----
-
-## 🔐 Sicurezza e stabilità
-
-| Aspetto                          | Stato   |
-|----------------------------------|---------|
-| Stack trace visibili all’utente  | ❌ Evitati |
-| Crash su input errato            | ⚠️ Alcuni casi gestiti, altri da migliorare |
-| Sanitizzazione input             | ⚠️ Minima, da migliorare |
-| Password/credenziali hardcoded   | ✅ Nessuna |
-| Propagazione eccezioni           | ⚠️ Alcune presenti, da schermare |
+La stampante predefinita può essere salvata in `~/.pista_printer.properties`.
 
 ---
 
-## ⚠ Limitazioni note
+## 🧾 Report giornaliero
+Da interfaccia è possibile produrre un report di fine giornata con:
+- Numero prenotazioni
+- Elenco clienti e biglietti
+- Incasso totale  
+  Il report può essere stampato su stampante termica o visualizzato in dialog.
 
-- Nessun supporto multiutente o autenticazione
-- Nessuna sincronizzazione cloud o database remoto
-- GUI non responsive né ottimizzata per dispositivi touch
-- Assenza di pattern avanzati (Observer, Strategy, ecc.)
-- Salvataggio non automatico su eventi
+---
+
+## 🚫 Limitazioni attuali
+- Nessuna autenticazione o gestione ruoli
+- Le prenotazioni **non sono modificabili** dopo la vendita
+- Anagrafica clienti solo in memoria (nome, età, telefono, tessera)
+- Persistenza solo locale (file `.ser`)
+- GUI non responsive per mobile
+- Assenza concorrenza multi‑thread
 
 ---
 
 ## 🔮 Sviluppi futuri
-
-- 💼 Integrazione login e ruoli (admin/operatori)
-- ☁️ Connessione a backend REST o Firebase
-- 🧾 Stampa scontrino via stampanti ESC/POS
-- 📈 Dashboard visuale per l’amministrazione
-- 🎨 Interfaccia più moderna e responsive
-- 🧠 Inserimento Observer e Strategy pattern (es. aggiornamento UI automatico, logiche promozionali)
-- 🧵 Supporto multithreading per la gestione concorrente di prenotazioni
-
----
-
-## ▶️ Istruzioni per l'esecuzione
-
-1. Clona il progetto o scaricalo come `.zip`
-2. Aprilo in **IntelliJ IDEA** o **Eclipse** (Java 17+)
-3. Costruisci il progetto con Maven (`pom.xml`)
-4. Esegui `HelloApplication.java`
-5. Tutti i dati vengono salvati nei file `.ser` all’interno della cartella radice
+| Priorità | Feature | Descrizione |
+|----------|---------|-------------|
+| 🔒 Alta  | Login & Ruoli | Separare permessi admin / operatore |
+| ☁️ Media | DB / Backend | Salvataggio su PostgreSQL o Firebase |
+| 📲 Media | UI Responsive | Migliorare layout per tablet/kiosk |
+| ♻️ Media | CRUD Prenotazioni | Modifica / annulla prenotazione |
+| 🧠 Bassa | Strategy Pricing | Promozioni e sconti dinamici |
+| 🔔 Bassa | Notifiche Push | Observer → notifiche desktop/mobile |
 
 ---
 
-## 📎 Note finali
+## ▶️ Come eseguire
 
-> Questo progetto nasce come esercizio accademico, ma è strutturato per essere facilmente estendibile a un prodotto reale.  
-> L’obiettivo è dimostrare una buona padronanza dell’OOP, del ciclo di vita di un’app Java e dei principali pattern software.
+1. Clona il repo o scarica lo .zip
+2. Importa in **IntelliJ IDEA** (o Eclipse) con **JDK 17**
+3. Lancia `HelloApplication.java`
+4. Assicurati che **JavaFX** sia configurato (VM args)
+5. (Facoltativo) Collega una stampante termica ESC/POS (USB o Network)  
+   Il software rileva automaticamente le stampanti disponibili e consente la selezione.
+
+I file di persistenza (`bookings.ser`, `inventory.ser`, `cashRegister.ser`) vengono generati automaticamente nella cartella principale al primo avvio se non presenti.
 
 ---
+
+## 📌 Note finali
+Questo progetto dimostra l’applicazione concreta di OOP, design pattern e interazione hardware in un contesto gestionale.  
+Non è ancora una base solida per un prodotto commerciale, ma con impegno e una ristrutturazione mirata può evolversi in una soluzione completa e professionale.
+
+---
+
