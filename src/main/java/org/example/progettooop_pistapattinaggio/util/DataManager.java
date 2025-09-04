@@ -3,131 +3,215 @@ package org.example.progettooop_pistapattinaggio.util;
 import org.example.progettooop_pistapattinaggio.model.Booking;
 import org.example.progettooop_pistapattinaggio.model.Slot;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.nio.file.attribute.PosixFilePermission;
+import java.security.MessageDigest;
+import java.util.*;
 
 /**
- * La classe {@code DataManager} gestisce il salvataggio e il caricamento
- * persistente dei dati dell'applicazione, come prenotazioni, slot, inventario e cassa.
- * <p>Utilizza la serializzazione Java per scrivere e leggere oggetti su file .ser.</p>
+ * Persistenza con serializzazione + controlli:
+ * - scrittura atomica (NIO, file temporaneo + move)
+ * - file .tag di integrità: HMAC-SHA256 se APP_HMAC_KEY, altrimenti SHA-256
+ * - filtro di deserializzazione JEP-290 (allow-list + limiti)
+ * - metodi tipizzati che verificano il tipo reale degli oggetti
  */
 public class DataManager {
 
-    /**
-     * Salva un oggetto generico in un file tramite serializzazione.
-     *
-     * @param object   oggetto da salvare
-     * @param filename nome del file di destinazione
-     */
-    public static void save(Object object, String filename) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(object);
-        } catch (IOException e) {
-            System.out.println("Errore durante il salvataggio dei dati: " + e.getMessage());
-            e.printStackTrace();
+    private static Path tagPath(Path dataFile) {
+        return dataFile.resolveSibling(dataFile.getFileName() + ".tag");
+    }
+
+    private static void setOwnerRW(Path p) {
+        try {
+            Set<PosixFilePermission> perms = EnumSet.of(
+                    PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE
+            );
+            Files.setPosixFilePermissions(p, perms);
+        } catch (UnsupportedOperationException | IOException ignored) {
         }
     }
 
-    /**
-     * Carica un oggetto serializzato da file.
-     *
-     * @param filename nome del file da cui caricare
-     * @return oggetto caricato, oppure {@code null} se il file non esiste o si verifica un errore
-     */
-    public static Object load(String filename) {
-        File file = new File(filename);
-        if (!file.exists()) {
-            System.out.println("📁 Il file " + filename + " non esiste, verrà creato alla prima scrittura.");
-            return null;
+    private static byte[] computeTag(byte[] payload) {
+        String key = System.getenv("APP_HMAC_KEY");
+        try {
+            if (key != null && !key.isBlank()) {
+                Mac mac = Mac.getInstance("HmacSHA256");
+                mac.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+                return mac.doFinal(payload);
+            } else {
+                return MessageDigest.getInstance("SHA-256").digest(payload);
+            }
+        } catch (Exception e) {
+            throw new IllegalStateException("Errore calcolo tag", e);
         }
+    }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+    private static void writeAtomic(Path dataFile, byte[] payload) throws IOException {
+        Path parent = dataFile.getParent();
+        if (parent != null) Files.createDirectories(parent);
+
+        Path tmp = dataFile.resolveSibling(dataFile.getFileName() + ".tmp");
+        Files.write(tmp, payload, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        setOwnerRW(tmp);
+
+        try {
+            Files.move(tmp, dataFile, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (AtomicMoveNotSupportedException ex) {
+            Files.move(tmp, dataFile, StandardCopyOption.REPLACE_EXISTING);
+        }
+        setOwnerRW(dataFile);
+
+        byte[] tag = computeTag(payload);
+        Path tagFile = tagPath(dataFile);
+        Files.write(tagFile, tag, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        setOwnerRW(tagFile);
+    }
+
+    /** Ritorna bytes se tag ok, null se mancano file/tag, eccezione se tag non corrisponde. */
+    private static byte[] readVerified(Path dataFile) throws IOException {
+        Path tagFile = tagPath(dataFile);
+        if (!Files.exists(dataFile) || !Files.exists(tagFile)) return null;
+
+        byte[] payload = Files.readAllBytes(dataFile);
+        byte[] tag = Files.readAllBytes(tagFile);
+        byte[] calc = computeTag(payload);
+
+        if (!MessageDigest.isEqual(tag, calc)) {
+            throw new SecurityException("Tag non valido per " + dataFile.getFileName());
+        }
+        return payload;
+    }
+
+    //Serializzazione difensiva
+    private static ObjectInputFilter filter() {
+        String pattern = String.join("",
+                "maxdepth=50;maxrefs=100000;maxbytes=10485760;",
+                "java.base/*;java.util.*;java.time.*;",
+                "org.example.progettooop_pistapattinaggio.model.*;",
+                "org.example.progettooop_pistapattinaggio.util.*;",
+                "!*"
+        );
+        return ObjectInputFilter.Config.createFilter(pattern);
+    }
+
+    private static byte[] toBytes(Object o) throws IOException {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+            oos.writeObject(o);
+            oos.flush();
+            return bos.toByteArray();
+        }
+    }
+
+    private static Object fromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+             ObjectInputStream ois = new ObjectInputStream(bis)) {
+            ois.setObjectInputFilter(filter());
             return ois.readObject();
+        }
+    }
+
+    //API generiche (firme invariate)
+    public static void save(Object object, String filename) {
+        Path dataFile = Paths.get(filename);
+        try {
+            writeAtomic(dataFile, toBytes(object));
+        } catch (IOException e) {
+            System.out.println("Errore salvataggio: " + e.getMessage());
+        }
+    }
+
+    public static Object load(String filename) {
+        Path dataFile = Paths.get(filename);
+        if (!Files.exists(dataFile)) {
+            System.out.println("File assente: " + filename);
+            return null;
+        }
+        try {
+            byte[] payload = readVerified(dataFile);
+            if (payload == null) return null; // file o tag mancanti
+            return fromBytes(payload);
+        } catch (SecurityException se) {
+            System.out.println("Integrità fallita: " + se.getMessage());
+            return null;
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Errore durante il caricamento dei dati: " + e.getMessage());
+            System.out.println("Errore caricamento: " + e.getMessage());
             return null;
         }
     }
 
-    /**
-     * Salva l'oggetto {@link Inventory} su file.
-     *
-     * @param inventory inventario da salvare
-     */
+    //Helper tipizzati
+
+    private static <T> T loadExact(String filename, Class<T> expected) {
+        Object o = load(filename);
+        if (o == null) return null;
+        if (o.getClass() != expected) {
+            System.out.println("Tipo inatteso in " + filename + ": " + o.getClass().getName());
+            return null;
+        }
+        return expected.cast(o);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> List<T> loadListExact(String filename, Class<T> elementType) {
+        Object o = load(filename);
+        if (!(o instanceof List<?> raw)) return null;
+        for (Object it : raw) {
+            if (it == null || it.getClass() != elementType) {
+                System.out.println("Lista non valida in " + filename);
+                return null;
+            }
+        }
+        return (List<T>) raw;
+    }
+
+    //API tipizzate
+
     public static void saveInventory(Inventory inventory) {
         save(inventory, "inventory.ser");
     }
 
-    /**
-     * Carica l'oggetto {@link Inventory} da file. Se il file non esiste o è corrotto,
-     * restituisce un nuovo oggetto {@code Inventory} vuoto.
-     *
-     * @return oggetto {@code Inventory} caricato o nuovo
-     */
     public static Inventory loadInventory() {
-        Inventory inventory = (Inventory) load("inventory.ser");
-        return (inventory != null) ? inventory : new Inventory();
+        Inventory inv = loadExact("inventory.ser", Inventory.class);
+        return (inv != null) ? inv : new Inventory();
     }
 
-    /**
-     * Salva la lista di prenotazioni su file.
-     *
-     * @param bookings lista di {@link Booking}
-     */
     public static void saveBookings(List<Booking> bookings) {
+        for (Object b : bookings) {
+            if (b == null || b.getClass() != Booking.class) {
+                throw new IllegalArgumentException("La lista contiene elementi non Booking");
+            }
+        }
         save(bookings, "bookings.ser");
     }
 
-    /**
-     * Carica la lista di prenotazioni da file.
-     * Se il file è assente o corrotto, crea un nuovo file vuoto.
-     *
-     * @return lista di {@link Booking}
-     */
     public static List<Booking> loadBookings() {
-        List<Booking> bookings = (List<Booking>) load("bookings.ser");
-        if (bookings == null) {
-            saveBookings(new ArrayList<>());
-            System.out.println("bookings.ser creato con lista vuota.");
-            return new ArrayList<>();
+        List<Booking> list = loadListExact("bookings.ser", Booking.class);
+        if (list == null) {
+            list = new ArrayList<>();
+            saveBookings(list);
+            System.out.println("Creato bookings.ser vuoto.");
         }
-        return bookings;
+        return list;
     }
 
-    /**
-     * Salva un singolo {@link Slot} su file.
-     *
-     * @param slot slot da salvare
-     */
     public static void saveSlot(Slot slot) {
         save(slot, "slot.ser");
     }
 
-    /**
-     * Carica un oggetto {@link Slot} da file.
-     *
-     * @return oggetto {@code Slot} caricato oppure {@code null} se non esiste
-     */
     public static Slot loadSlot() {
-        return (Slot) load("slot.ser");
+        return loadExact("slot.ser", Slot.class);
     }
 
-    /**
-     * Salva il registro cassa su file.
-     *
-     * @param cashRegister oggetto {@link CashRegister} da salvare
-     */
     public static void saveCashRegister(CashRegister cashRegister) {
         save(cashRegister, "cashRegister.ser");
     }
 
-    /**
-     * Carica il registro cassa da file.
-     *
-     * @return oggetto {@link CashRegister} caricato oppure {@code null} se non esiste
-     */
     public static CashRegister loadCashRegister() {
-        return (CashRegister) load("cashRegister.ser");
+        return loadExact("cashRegister.ser", CashRegister.class);
     }
 }
